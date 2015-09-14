@@ -3,9 +3,8 @@ express = require('express')
 _       = require('lodash')
 request = require('superagent')
 # Bit ly constants
-BITLY_HOST   = process.env.BITLY_HOST or 'api.bitly.com'
-BITLY_LOGIN  = process.env.BITLY_LOGIN
-BITLY_APIKEY = process.env.BITLY_APIKEY
+SHORTENER_HOST   = process.env.SHORTENER_HOST or 'www.googleapis.com'
+SHORTENER_APIKEY = process.env.SHORTENER_APIKEY
 # List of allowed domain
 ALLOWED_DOMAINS = _.map (process.env.ALLOWED_DOMAINS or '').split(','), _.trim
 # Create a simple express app
@@ -25,7 +24,6 @@ extractDomain = (url) ->
   # Find & remove port number
   domain = domain.split(':')[0]
 
-
 # Main (and only) route
 app.get '/', (req, res)->
     # URL to shorten
@@ -36,15 +34,13 @@ app.get '/', (req, res)->
     allowed = _.any ALLOWED_DOMAINS, (domain)-> domain is url_domain
     # Stop if not allowed
     return res.send(401) unless allowed
-    # Build the request to the bit.ly API
+    # Build the request to the shortner API
     request
-      .get 'http://' + BITLY_HOST + '/v3/shorten'
-      .query
-        # Request query params
-        format : 'json'
-        login  : BITLY_LOGIN
-        apiKey : BITLY_APIKEY
-        longUrl: encodeURIComponent(url)
+      .post 'https://' + SHORTENER_HOST + '/urlshortener/v1/url'
+      # Authenticate request
+      .query key: SHORTENER_APIKEY
+      # Request query params
+      .send longUrl: url
       .end (err, result)->
         # Simply send the request body
         res.jsonp result.body
