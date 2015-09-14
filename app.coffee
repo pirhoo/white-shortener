@@ -3,7 +3,7 @@ express = require('express')
 _       = require('lodash')
 request = require('superagent')
 # Bit ly constants
-BITLY_HOST   = process.env.BITLY_HOST   or 'api.bitly.com'
+BITLY_HOST   = process.env.BITLY_HOST or 'api.bitly.com'
 BITLY_LOGIN  = process.env.BITLY_LOGIN
 BITLY_APIKEY = process.env.BITLY_APIKEY
 # List of allowed domain
@@ -44,7 +44,7 @@ app.get '/', (req, res)->
         format : 'json'
         login  : BITLY_LOGIN
         apiKey : BITLY_APIKEY
-        longUrl: url
+        longUrl: encodeURIComponent(url)
       .end (err, result)->
         # Simply send the request body
         res.jsonp result.body
