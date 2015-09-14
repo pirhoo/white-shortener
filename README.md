@@ -1,6 +1,6 @@
 # White Shortener
 
-This very simple URL-shortener uses bit.ly through a whitelist of domains.
+This very simple URL-shortener uses bit.ly through a whitelist of domains. This might be useful for client-side URL shortenin without leaking API keys.
 
 ## Install
 
