@@ -15,7 +15,6 @@ app.use cors()
 # Extract domain from a given URL
 # @src http://stackoverflow.com/questions/8498592/extract-root-domain-name-from-string
 extractDomain = (url) ->
-  domain = undefined
   # Find & remove protocol (http, ftp, etc.) and get domain
   if url.indexOf('://') > -1
     domain = url.split('/')[2]
