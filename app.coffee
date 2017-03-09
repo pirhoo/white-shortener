@@ -25,24 +25,24 @@ extractDomain = (url) ->
 
 # Main (and only) route
 app.get '/', (req, res)->
-    # URL to shorten
-    url = req.query.url
-    # Extract the domain from the URL
-    url_domain = extractDomain url
-    # Call the bit.ly API
-    allowed = _.any ALLOWED_DOMAINS, (domain)-> domain is url_domain
-    # Stop if not allowed
-    return res.send(401) unless allowed
-    # Build the request to the shortner API
-    request
-      .post 'https://' + SHORTENER_HOST + '/urlshortener/v1/url'
-      # Authenticate request
-      .query key: SHORTENER_APIKEY
-      # Request query params
-      .send longUrl: url
-      .end (err, result)->
-        # Simply send the request body
-        res.jsonp result.body
+  # URL to shorten
+  url = req.query.url
+  # Extract the domain from the URL
+  url_domain = extractDomain url
+  # Call the bit.ly API
+  allowed = _.any ALLOWED_DOMAINS, (domain)-> domain is url_domain
+  # Stop if not allowed
+  return res.send(401) unless allowed
+  # Build the request to the shortner API
+  request
+    .post 'https://' + SHORTENER_HOST + '/urlshortener/v1/url'
+    # Authenticate request
+    .query key: SHORTENER_APIKEY
+    # Request query params
+    .send longUrl: url
+    .end (err, result)->
+      # Simply send the request body
+      res.jsonp result.body
 
 # Then start listening
 server = app.listen process.env.PORT or 3000
